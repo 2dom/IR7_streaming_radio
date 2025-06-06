@@ -87,15 +87,12 @@ Even though most components (except the amp) support low-power modes, I found th
 <br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_182227144.jpg" width="70%"><br>
 Step 5 - Low power</p>
-Solder two power wires to the battery terminals. To monitor battery voltage add a voltage divider made of two 10kΩ resistors to bring the voltage down to a safe 0–2.2V range for the ESP32. Connect all remaining power lines as shown below.
+Solder two power wires to the battery terminals. To monitor battery voltage add a voltage divider made of two 10kΩ resistors to bring the voltage down to a safe 0–2.2V range for the ESP32.
 <br>
 <br> 
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_183034954.jpg" width="70%"><br>
  Step 6 - Battery</p>
  <br>
- <br>
-<p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_183034954.jpg" width="70%"><br>
- Step 6 - Battery</p>
 The ESP32's built-in RTC is notoriously unreliable. To ensure accurate timekeeping and enable timed wake-ups, we use a DS3231 Real-Time Clock module. It keeps time while the system is asleep and can trigger an interrupt to wake the ESP32 at a precise time. On some modules, the interrupt pin isn’t exposed — in that case, you’ll need to solder a wire directly to the chip (see picture).
 <p align="center">
   <p align="center"> <img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_185822012.jpg" width="70%"><br>
