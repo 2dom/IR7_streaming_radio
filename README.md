@@ -51,8 +51,8 @@ Final design</p>
 <tr><td>Rotary encoder - 0.20€</td></tr>
 <tr><td>TS3134 P-Channel MOSFET - 0.10€</td></tr>
 <tr><td>Miscellaneous resistors and plastic screws - 0.10€</td></tr>
-<tr><td>3D printed parts (from JLCPCB) - 15.00€</td></tr>
-<tr><td><b>TOTAL - 40.00€</b></td></tr>
+<tr><td>3D printed parts (optionally from JLCPCB) - 2.00€ (15.00€)</td></tr>
+<tr><td><b>TOTAL - 27.00€ (40.00€)</b></td></tr>
 
  
 </table>
