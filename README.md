@@ -52,7 +52,7 @@ Final design</p>
 <tr><td>TS3134 P-Channel MOSFET - 0.10€</td></tr>
 <tr><td>Miscellaneous resistors and plastic screws - 0.10€</td></tr>
 <tr><td>3D printed parts (from JLCPCB) - 15.00€</td></tr>
-<tr><td>TOTAL - 40.00€</td></tr>
+<tr><td><b>TOTAL - 40.00€</b></td></tr>
 
  
 </table>
