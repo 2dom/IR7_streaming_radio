@@ -40,17 +40,21 @@ Final design</p>
  
 <table align="center">
 <tr><th>Part list</th></tr>
-<tr><td>Lolin32 Lite / ESP32 microcontroller with onboard battery charging</td></tr>
-<tr><td>GC9A01 round IPS LCD display</td></tr>
-<tr><td>DS3231 real-time clock</td></tr>
-<tr><td>One or two 18650 batteries</td></tr>
-<tr><td>VS1053 MP3 decoder board</td></tr>
-<tr><td>PAM8403 audio amplifier</td></tr>
-<tr><td>600:600 Ohm isolation transformer for cleaner audio</td></tr>
-<tr><td>2–2.5 inch wideband speaker (e.g., Visaton FR7)</td></tr>
-<tr><td>Rotary encoder</td></tr>
-<tr><td>TS3134 P-Channel MOSFET</td></tr>
-<tr><td>Miscellaneous resistors and plastic screws</td></tr>
+<tr><td>Lolin32 Lite / ESP32 microcontroller with onboard battery charging- 3.80€</td></tr>
+<tr><td>GC9A01 round IPS LCD display - 3.60€</td></tr>
+<tr><td>DS3231 real-time clock - 1.10€</td></tr>
+<tr><td>One or two 18650 batteries - 2.00€</td></tr>
+<tr><td>VS1053 MP3 decoder board - 5.20€</td></tr>
+<tr><td>PAM8403 audio amplifier - 0.40€</td></tr>
+<tr><td>600:600 Ohm isolation transformer for cleaner audio - 0.50€</td></tr>
+<tr><td>2–2.5 inch wideband speaker (e.g., Visaton FR7) - 7.00€</td></tr>
+<tr><td>Rotary encoder - 0.20€</td></tr>
+<tr><td>TS3134 P-Channel MOSFET - 0.10€</td></tr>
+<tr><td>Miscellaneous resistors and plastic screws - 0.10€</td></tr>
+<tr><td>3D printed parts (from JLCPCB) - 15.00€</td></tr>
+<tr><td>TOTAL - 40.00€</td></tr>
+
+ 
 </table>
 <br>
 First, let’s get started by preparing the 3D-printed components. You can either print the four plastic parts yourself — the lower shell, upper shell, resonator, and knob — or order them from a 3D printing service of your choice.<br>
