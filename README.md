@@ -1,4 +1,4 @@
-<p style="color: #87CEEB"> DISCLAIMER: THIS REPOSITORY DOES NOT INCLUDE ANY TRADEMARK-PROTECTED MATERIAL IN PARTICULAR VENDOR LOGOS.</p>
+<p style="color: #87CEEB"> DISCLAIMER: THIS REPOSITORY DOES NOT CONTAIN ANY TRADEMARK-PROTECTED MATERIAL E.G. VENDOR LOGOS.</p>
 
 <p align="center"><a href="https://www.youtube.com/watch?v=Ej3K-IHdLqs"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/youtube.png" width="100%"></a></p>
 
