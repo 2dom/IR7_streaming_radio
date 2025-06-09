@@ -1,4 +1,4 @@
-<p style="color: #87CEEB"> DISCLAIMER: THE DESIGN FILES IN THIS REPOSITORY HAVE BEEN CLEARED OF ANY TRADEMARK-PROTECTED MATERIAL I.E. VENDOR LOGOS.</p>
+<p style="color: #87CEEB"> DISCLAIMER: THE DESIGN FILES IN THIS REPOSITORY HAVE BEEN CLEARED OF ANY TRADEMARK-PROTECTED LOGOS.</p>
 
 <p align="center"><a href="https://www.youtube.com/watch?v=Ej3K-IHdLqs"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/youtube.png" width="100%"></a></p>
 
