@@ -22,7 +22,7 @@ Dieter Rams' design leagacy lives on in many current products e.g. in the form o
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/teenage.jpg" width="70%"><br>
 Teenage Engineering TP-7</p>
 
-<h1>Let’s Build It!</h1>
+<h1>Something new</h1>
 <p>Inspired by Braun’s iconic designs, particularly the T3, I started from the familiar speaker hole pattern and gradualy added elements that worked visually and physically (would fit the electronics). The first attempt was a direct copy of the T3 with an added square display (much like the iPod). Albeit the design worked reasonably well, it also felt overused and a lost opportunity in creating something new.<br>
  <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/t3_clone2.png" width="70%"><br>
 First concept based on T3 shape and TP1 hole pattern</p>
@@ -30,7 +30,7 @@ I kept experimenting with different shapes until a cylindrical form emerged, dri
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250604_145024065.jpg" width="70%"><br>
 Rectangular ultra-low-power display</p>
 <p>Initially, I opted for a rectangular ultra–low-power monochrome display to maximize battery life. However, I soon realized that a) it is a visual mess and b) such displays lack backlighting, making them practically unusable in an alarm clock / low-light kind of situation. So might as well use nice round IPS LCD and turn it off during sleep. Not only does it complement the circular design of the case far more naturally, but it also offers a significantly better user experience thanks to its higher resolution and contrast.</p>
-<p>The haptic interface also evolved over time. I started off with two encoder knobs (one for station, one for volume), but reduced it later to a single knob angled at 45-degrees. This choice aligned much better with rest of the design and effectively simplified the user interface.</p>
+<p>The haptic interface also evolved over time. I started off with two encoder knobs (one for station, one for volume), but reduced it later to a single knob angled at 45-degrees. This choice aligned much better with rest of the design and effectively simplified the user interface. The radio has a current consumption of about 800uA during sleep and 200mA during radio operation which equates to 220 days of standy or 22h of radio play using two 2200mAh 18650 cells. That is 1.5 months of battery powered alarm clock operation, given that you need 30min to get out of bed each morning.</p>
 <br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/Radio_Clock v40_top_white.png" width="100%"><br>
 Final design</p>
