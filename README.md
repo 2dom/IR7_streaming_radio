@@ -128,4 +128,4 @@ The final component to wire up is the rotary encoder. After connecting all GPIO 
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_190320371.jpg" width="70%"><br>
  Step 8 - Encoder wiring and finishing touches</p>
 <br>
-<p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250608_140712961-EDIT.jpg" width="100%"><br></p><br> 
+<p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250608_140712961-EDIT (1).jpg" width="100%"><br></p><br> 
