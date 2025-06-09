@@ -67,7 +67,7 @@ While my FDM printer handled the case fairly well, it struggled with producing p
 <img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_132123846.jpg" width="70%"><br>
 Plastic parts</p>
 <br>
-Begin by gluing the ESP32 board and rotary encoder into their designated locations. Avoid using thermoplastic (e.g. hot) glue, as the microcontroller can heat up significantly during charging and delaminate.<br><br>
+Begin by gluing the ESP32 board and rotary encoder into their designated locations. Avoid using thermoplastic (e.g. hot) glue, as the microcontroller can heat up significantly during charging and will delaminate.<br><br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_114952391.jpg" width="70%"><br>
 Step 1 - ESP32 & encoder</p>
 Next, insert the speaker into the resonator tube. I’ve included cutout sizes for both 2-inch and 2.5-inch speakers. Use plastic screws to secure the speaker. If the fit is tight, you may need to carefully trim the edges. Finally, solder the speaker wires to the terminals.<br>
@@ -78,7 +78,7 @@ Next, insert the speaker into the resonator tube. I’ve included cutout sizes f
   <img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_132726693.jpg" width="70%"><br>
 <img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_132833551.jpg" width="70%"><br>
 Step 2 - Speaker</p>
-Since the VS1053/VS1003 audio output is only suitable to drive headphones, an audio amplifier is needed. However, directly connecting the amplifier to the VS1053 introduces noticeable noise. The solution: use an audio isolation transformer. I soldered mine directly onto the amplifier board to keep the design compact and reduce cable length, which minimizes noise pickup. Connect the amplifier and transformer to the VS1053 using two 1kΩ resistors. Note that you want to use a geeen VS1053 board commonly available on Ebay and Aliexpress. The blue board shown in the picture actually uses an VS1003 chip which is somewhat compatible but supports less codecs and has a few other quirks (see video below).<br>
+Since the VS1053/VS1003 audio output is only suitable to drive headphones, an audio amplifier is needed. However, directly connecting the amplifier to the VS1053 introduces noticeable noise. The solution: use an audio isolation transformer. I soldered mine directly onto the amplifier board to keep the design compact and reduce cable length, which minimizes noise pickup. Connect the amplifier and transformer to the VS1053 using two 1kΩ resistors. Note that you want to use a geeen VS1053 board commonly available on Ebay and Aliexpress. The blue board shown in the picture actually uses an VS1003 chip which is somewhat compatible but supports less codecs and has a few other quirks.<br>
 <br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_133629600.jpg" width="70%"><br>
 <img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250501_134841618.jpg" width="70%"><br>
