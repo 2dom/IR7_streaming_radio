@@ -1,4 +1,4 @@
-<p style="color: #87CEEB"> DISCLAIMER: THIS REPOSITORY DOES NOT CONTAIN ANY TRADEMARK-PROTECTED MATERIAL I.E. VENDOR LOGOS.</p>
+<p style="color: #87CEEB"> DISCLAIMER: THE DESIGN FILES IN THIS REPOSITORY DOES NOT CONTAIN ANY TRADEMARK-PROTECTED MATERIAL I.E. VENDOR LOGOS.</p>
 
 <p align="center"><a href="https://www.youtube.com/watch?v=Ej3K-IHdLqs"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/youtube.png" width="100%"></a></p>
 
@@ -16,9 +16,9 @@ Rams' influence on the design industry, particularly on companies like Apple, is
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/rams2.jpg" width="70%"><br>
  Braun T3 portable radio</p>
 <br>
-After a glorious period of minimalist designwork, Dieter Rams' left Braun in the mid-1990s and the company gradually shifted away from its legacy of minimalist consumer electronics design. Under changing market demands, Braun transitioned its focus primarily toward stylish high quality grooming and personal care products, such as electric shavers, hair dryers, and epilators. <br>
+After a glorious period of minimalist designwork, Dieter Rams' left Braun in the mid-1990s and the company gradually shifted away from its legacy of minimalist consumer electronics toward high quality personal care products, such as electric shavers, hair dryers, and epilators. <br>
 <br>
-Dieter Rams' design leagacy lives on in many current products e.g. in the form of the portable recoders and synthesizers from Teenage Engineering.<br><br>
+Dieter Rams' design legacy lives on in many contemporary products, such as the portable recorders and synthesizers by Teenage Engineering.<br><br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/teenage.jpg" width="70%"><br>
 Teenage Engineering TP-7</p>
 
