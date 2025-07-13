@@ -103,8 +103,8 @@ String timezone = "CET-1CEST,M3.5.0,M10.5.0/3"; // Berlin
 const char* ntp_server = "192.53.103.108"; // ptbtime1.ptb.de Braunschweig
 
 // Wifi stuff
-const char* SSID[] = {"Look mum...no wires!","FRITZ!BoxGastzugang"};
-const char* PSK[] = {"huibuhdasnachtgespenst","diefischerinvombodensee"};
+const char* SSID[] = {"xxx","yyy"};
+const char* PSK[] = {"zzz","yyy"};
 #define no_wifi_networks sizeof(SSID)/sizeof(SSID[0])
 const uint32_t connectTimeoutMs = 3000;
 
