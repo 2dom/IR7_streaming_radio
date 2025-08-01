@@ -129,3 +129,91 @@ The final component to wire up is the rotary encoder. After connecting all GPIO 
  Step 8 - Encoder wiring and finishing touches</p>
 <br>
 <p align="center"><img src="https://github.com/2dom/IR7_streaming_radio/blob/main/Images/PXL_20250608_140712961-EDIT (1).jpg" width="100%"><br></p><br> 
+
+
+
+## 🔌 Uploading the Software to the ESP32
+
+Once your hardware is assembled, it’s time to upload the firmware and web assets to the ESP32. You can use either the **Arduino IDE** or **PlatformIO**. Both work—choose whichever you're more comfortable with.
+
+---
+
+### 🧰 Arduino IDE
+
+1. **Install Required Boards and Libraries**
+   - Install the **ESP32 by Espressif Systems** board via the **Boards Manager**.
+   - Use the **Library Manager** to install:
+     - `TFT_eSPI`
+     - `VS1053_ext` (from this repo or local import)
+     - `AiEsp32RotaryEncoder`
+     - `RTClib`
+     - `ESP32Time`
+
+2. **Select Your Board**
+   - Go to `Tools > Board` and choose your ESP32 model (e.g., **ESP32 Dev Module**).
+
+3. **Configure TFT_eSPI**
+   - The IR7 uses a **GC9A01 240x240 round display**.  
+     Replace the contents of `TFT_eSPI/User_Setup.h` with:
+     ```cpp
+     #define GC9A01_DRIVER
+
+     #define TFT_WIDTH  240
+     #define TFT_HEIGHT 240
+
+     #define TFT_CS   27  // Chip select
+     #define TFT_DC   26  // Data/command
+     #define TFT_RST  -1  // Reset pin (set to -1 if not used)
+
+     #define TFT_SCLK 33
+     #define TFT_MOSI 25
+
+     #define LOAD_GLCD
+     #define LOAD_FONT2
+     #define LOAD_FONT4
+     #define LOAD_FONT6
+     #define LOAD_FONT7
+     #define LOAD_FONT8
+
+     #define SMOOTH_FONT
+
+     #define SPI_FREQUENCY  40000000
+     ```
+   - Alternatively, use the `User_Setup.h` file provided in the `lib/TFT_eSPI/` folder of this repo.
+
+4. **Upload the Code**
+   - Open `main.ino`, select the correct port, and click **Upload**.
+
+5. **Upload SPIFFS Data (Stations & Wi-Fi)**
+   - Install the [ESP32 Sketch Data Upload tool](https://github.com/me-no-dev/arduino-esp32fs-plugin).
+   - Place `stations.txt` and `wifi.txt` inside a folder named `data/`.
+   - Then go to **Tools > ESP32 Sketch Data Upload** to flash the SPIFFS filesystem.
+
+---
+
+### 🧰 PlatformIO (VS Code)
+
+1. **Open the Project**
+   - Use **VS Code** with the **PlatformIO** extension and open the IR7 project folder.
+
+2. **Dependencies**
+   - These libraries are automatically handled via `platformio.ini`, but ensure these are present:
+     - `TFT_eSPI`
+     - `VS1053_ext`
+     - `AiEsp32RotaryEncoder`
+     - `RTClib`
+     - `ESP32Time`
+
+3. **Configure TFT_eSPI**
+   - Place the same `User_Setup.h` as shown above into `lib/TFT_eSPI/` or override it using `platformio.ini`:
+     ```ini
+     build_flags =
+       -DUSER_SETUP_LOADED=1
+       -include src/User_Setup.h
+     ```
+   - Then place the `User_Setup.h` file into the `src/` directory.
+
+4. **Upload Firmware**
+   ```bash
+   pio run --target upload
+
