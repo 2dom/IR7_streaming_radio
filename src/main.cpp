@@ -11,6 +11,10 @@ BSD license, check license.txt for more information
 #include <WiFiMulti.h>
 #include <WiFiUdp.h>
 #include <WiFiClient.h>
+#include <WebServer.h>
+#include <DNSServer.h>
+#include <SPIFFS.h>
+#include <Preferences.h>
 #include <esp_task_wdt.h>
 #include <VS1053_ext.h>              
 #include "images.h"
@@ -62,6 +66,12 @@ WiFiMulti wifiMulti;
 
 #define myabs(x) ((x)>0?(x):-(x))
 
+WebServer server(80);
+bool ap_mode = false;
+
+const byte DNS_PORT = 53;
+DNSServer dnsServer;
+
 // Time keeping
 #define uS_TO_SEC_FACTOR 1000000ULL
 RTC_DS3231 rtc;
@@ -103,8 +113,8 @@ String timezone = "CET-1CEST,M3.5.0,M10.5.0/3"; // Berlin
 const char* ntp_server = "192.53.103.108"; // ptbtime1.ptb.de Braunschweig
 
 // Wifi stuff
-const char* SSID[] = {"xxx","yyy"};
-const char* PSK[] = {"zzz","yyy"};
+const char* SSID[] = {};//"Look mum...no wires!","FRITZ!BoxGastzugang"};
+const char* PSK[] = {};//"huibuhdasnachtgespenst","diefischerinvombodensee"};
 #define no_wifi_networks sizeof(SSID)/sizeof(SSID[0])
 const uint32_t connectTimeoutMs = 3000;
 
@@ -135,32 +145,6 @@ int wifi_y_pos=25;
 int wifi_x_pos=100;
 int menu_y_pos=165;
 
-String stations[]={
-
-  // Jazz
-  "NPO Soul n Jazz@http://icecast.omroep.nl/radio6-bb-mp3",						
-	"The Great American Songbook@http://tgas.dyndns.org:8001/1",						
-	"ABC Jazz@http://audio-edge-es6pf.mia.g.radiomast.io/f0ac4bf3-bbe5-4edb-b828-193e0fdc4f2f",	
-	"Fascinating Jazz Radio@http://195.201.166.244:8270/stream",				
-	"Jazz Sakura@https://kathy.torontocast.com:3330/",				
-	"A A Jazz@http://62.210.204.2:8000/stream/5/",				
-	"ABC Relax New@http://manager7.streamradio.fr:1050/",	
-	"Cool Jazz HD@http://51.255.235.165:5092/stream",	
-	"Best Smooth Jazz UK@http://64.95.243.43:8002/stream",
-	
-  // Rock
-  "Radio Seefunk@http://webradio.radio-seefunk.de:8000/",
-  "Das Ding@https://liveradio.swr.de/d9zadj3/dasding/",
-  "Power 100@https://playerservices.streamtheworld.com/api/livestream-redirect/MAR_ZINC96.mp3",
-  "Rock Skye@https://stream.laut.fm/rock",
-  "La casa del rock@https://rockfm-cope-rrcast.flumotion.com/cope/rockfm.mp3",
-  "Rockland Radio@https://radio21.streamabc.net/radio21-rrludwigshafen-mp3-128-3576211",
-
-	// Funk, Soul, Oldies
-	"Funky Corner Radio@http://176.31.111.65:4744",	
-	"Magic Oldies Florida@http://airspectrum.cdnstream1.com:8000/1261_192",	
-	"Oldie Antenne@http://s1-webradio.antenne.de/oldies-but-goldies",	
-  };
 String this_stream_url;
 String this_stream_name;
 
@@ -300,10 +284,19 @@ void draw_wifi()
   }
 }
 
+void bat_empty()
+{
+  display.pushImage(0,0,240,240,BAT_EMPTY_LOGO);
+  delay(2000);
+  got_to_sleep();
+}
+
 // Draw battery voltage indicator
 void draw_battery()
 {
   float current_vcc=analogRead(VCC_PIN)/565.0;
+  if (current_vcc<3.2)
+    bat_empty();
   float delta_vcc = abs(current_vcc-last_vcc);
   if (delta_vcc > 0.1)
   {
@@ -414,6 +407,12 @@ void connect_wifi(){
 
   display.loadFont(NotoSansBold15);
 
+  value_string = "Connecting to wifi ...";
+  value_string_width = display.textWidth(value_string,1);
+  display.fillRect(0,160,240,16,TFT_BLACK);
+  display.setTextColor(TFT_WHITE, TFT_BLACK); 
+  display.setCursor(120-value_string_width/2, 160);
+  display.println(value_string);
 
   unsigned long start_time = millis();
   while(1)
@@ -432,7 +431,9 @@ void connect_wifi(){
         break;
       }
       if ((millis()-start_time)>60000)
-        ESP.restart();
+        got_to_sleep();
+      if (digitalRead(ENC1_BUT)==LOW)
+        got_to_sleep();
     }   
   pin_fade(0,LCD_BL);
 }
@@ -457,7 +458,7 @@ void init_display(){
 // Set-up I/O
 void init_io()
 {
-  pinMode(ENC1_BUT, INPUT_PULLUP);
+  
 
   pinMode(VS1053_RST, OUTPUT); 
   pinMode(VS1053_CS,OUTPUT);
@@ -561,11 +562,55 @@ void sync_ntp()
   }
 }
 
+void load_wifi_credentials() {
+  File f = SPIFFS.open("/wifi.txt", "r");
+  if (!f) {
+    Serial.println("No wifi.txt found.");
+    return;
+  }
+
+  while (f.available()) {
+    String line = f.readStringUntil('\n');
+    line.trim();
+    if (line.length() == 0) continue;
+
+    int sep = line.indexOf(';');
+    if (sep > 0) {
+      String ssid = line.substring(0, sep);
+      String pass = line.substring(sep + 1);
+      Serial.println("Adding SSID: " + ssid);
+      wifiMulti.addAP(ssid.c_str(), pass.c_str());
+    }
+  }
+  f.close();
+}
+
+std::vector<String> stationList;
+
+uint8_t numb_of_stations=0;
+
+void load_station_list() {
+  stationList.clear();
+  
+  File f = SPIFFS.open("/stations.txt", "r");
+  if (!f) {
+    Serial.println("No stations.txt found.");
+    return;
+  }
+
+  while (f.available()) {
+    String line = f.readStringUntil('\n');
+    line.trim();
+    Serial.println("Station: " + line);
+    if (line.length() > 0) stationList.push_back(line);
+    numb_of_stations++;
+  }
+  myconfig[1].high_limit=numb_of_stations-1;
+  f.close();
+}
+
 void full_init()
 {
-  
-
-
   if (myconfig[3].high_limit!=15) //No valid config - initialize
   {
     // Volume 
@@ -575,7 +620,7 @@ void full_init()
 
     // Stationƒ
     myconfig[1].low_limit=0;
-    myconfig[1].high_limit=sizeof(stations) / sizeof(stations[0])-1;
+    myconfig[1].high_limit=0;
     myconfig[1].value=0;
 
     // Time 
@@ -615,43 +660,13 @@ void full_init()
   ClockSprite.setSwapBytes(true);
   ClockSprite.loadFont(AgnellaBold50); 
 
+  // Mount SPIFFS (ensure this happens outside of AP mode too)
+  if (!SPIFFS.begin(true)) {
+    Serial.println("SPIFFS Mount Failed in full_init");
+  }
+
+  load_wifi_credentials();
   connect_wifi();
-
-  init_ntp();
-
-  // Real time clock
-  Wire.setPins(DS3231_SDA, DS3231_CLK);
-
- 
-
-  if (! rtc.begin()) {
-    Serial.println("RTC module is NOT found");
-    Serial.flush();
-    while (1);
-  }
-
-  DateTime now = rtc.now();
-  int hour = now.hour();
-  int minute = now.minute();  
-  Serial.println("RTC local time at boot: " + String(hour) + ":" + String(minute));
-
-  // BUT pin is still low - since the encoder button and the real time clock are both using it the 
-  // wakeup must have been triggered by the external real time clock
-  if (digitalRead(ENC1_BUT)==LOW)
-  {
-    auto_sleep=true;
-    Serial.println("Alarm wakeup - enabling autosleep - going to sleeo after s: " + String(auto_sleep_timeout/1000));
-  }
-  else
-    Serial.println("User wakeup - disabling autosleep");
-
-  // This resets the alarm and the external interrupt from real time clock
-  rtc.disable32K();  // stop signal at the 32K pin
-  rtc.clearAlarm(1);
-  rtc.clearAlarm(2);
-  rtc.disableAlarm(1);
-  rtc.disableAlarm(2);
-  rtc.writeSqwPinMode(DS3231_OFF); // stop signal at the SQW pin
     
   display.pushImage(0,0,240,240,BACKROUND);
   draw_time();
@@ -664,8 +679,10 @@ void full_init()
   
   start_VS1003();
   Serial.println("\n\nEncoder started\n");
+
+  load_station_list();
     
-  String station_string=String(stations[myconfig[1].value]);
+  String station_string = stationList[myconfig[1].value];
   int del_pos = station_string.indexOf('@');
   this_stream_url=station_string.substring(del_pos+1);
   this_stream_name=station_string.substring(0,del_pos);
@@ -710,17 +727,270 @@ void check_wakeup_reason() {
 }
 
 
+
+void start_ap_mode() {
+
+  init_io();
+
+  init_display();
+
+  ScrollTextSprite.setColorDepth(16); 
+  ScrollTextSprite.createSprite(1000, 15); 
+  ScrollTextSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
+  ScrollTextSprite.setTextSize(2);
+  ScrollTextSprite.setSwapBytes(true);
+
+  ClockSprite.setColorDepth(16); 
+  ClockSprite.createSprite(240, 40); 
+  ClockSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
+  ClockSprite.setTextSize(2);
+  ClockSprite.setSwapBytes(true);
+  ClockSprite.loadFont(AgnellaBold50); 
+    
+  display.fillScreen(TFT_BLACK);
+  display.pushImage(25,65,VENDOR_LOGO_WIDTH,VENDOR_LOGO_HEIGHT, VENDOR_LOGO, TFT_BLACK);
+  pin_fade(1,LCD_BL);
+  display.loadFont(NotoSansBold15);
+  String value_string = "Connect to Wifi:";
+  int value_string_width = display.textWidth(value_string,1);
+  display.setTextColor(TFT_WHITE, TFT_BLACK); // Set the font colour AND the background colour
+  display.setCursor(120-value_string_width/2, 160);
+  display.println(value_string);
+  value_string = "Braun IR7 Config";
+  value_string_width = display.textWidth(value_string,1);
+  display.setTextColor(TFT_WHITE, TFT_BLACK); // Set the font colour AND the background colour
+  display.setCursor(120-value_string_width/2, 180);
+  display.println(value_string);
+  
+
+  display.loadFont(NotoSansBold15);
+
+  WiFi.mode(WIFI_AP);
+  WiFi.softAP("Braun IR7 Config", "");
+  delay(100);
+
+  IPAddress apIP = WiFi.softAPIP();
+  Serial.print("AP IP address: ");
+  Serial.println(apIP);
+
+  // Start DNS server to redirect all domains to ESP IP
+  dnsServer.start(DNS_PORT, "*", apIP);
+
+  if (!SPIFFS.begin(true)) {
+    Serial.println("SPIFFS Mount Failed");
+    return;
+  }
+
+  // Landing page with prepopulated textarea fields
+  server.on("/", HTTP_GET, []() {
+  String wifi_data = "";
+  String station_data = "";
+
+  if (SPIFFS.exists("/wifi.txt")) {
+    File wf = SPIFFS.open("/wifi.txt", "r");
+    while (wf.available()) {
+      wifi_data += wf.readStringUntil('\n');
+      wifi_data += "\n";
+    }
+    wf.close();
+  }
+
+  if (SPIFFS.exists("/stations.txt")) {
+    File sf = SPIFFS.open("/stations.txt", "r");
+    while (sf.available()) {
+      station_data += sf.readStringUntil('\n');
+      station_data += "\n";
+    }
+    sf.close();
+  }
+
+  String html = R"rawliteral(
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      }
+      h2 {
+        text-align: center;
+        margin-top: 0;
+        font-size: 26px;
+      }
+      label {
+        font-weight: bold;
+        display: block;
+        margin: 20px 0 10px;
+        font-size: 20px;
+      }
+      textarea {
+        width: 100%;
+        padding: 12px;
+        font-family: monospace;
+        font-size: 16px;
+        resize: vertical;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      input[type="submit"] {
+        margin-top: 30px;
+        width: 100%;
+        padding: 14px;
+        background-color: #007BFF;
+        color: white;
+        font-size: 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Braun IR7 Web Radio Configuration</h2>
+      <form method="POST" action="/save">
+        <label for="wifi">Wi-Fi Credentials (SSID;password per line)</label>
+        <textarea name="wifi" rows="6">)rawliteral" + wifi_data + R"rawliteral(</textarea>
+
+        <label for="stations">Radio Stations (name@url per line)</label>
+        <textarea name="stations" rows="10">)rawliteral" + station_data + R"rawliteral(</textarea>
+
+        <input type="submit" value="Save & Reboot">
+      </form>
+    </div>
+  </body>
+  </html>
+  )rawliteral";
+
+  server.send(200, "text/html", html);
+  });
+
+  // Save config and restart
+  server.on("/save", HTTP_POST, []() {
+    String wifi = server.arg("wifi");
+    String stations = server.arg("stations");
+
+    File wf = SPIFFS.open("/wifi.txt", "w");
+    wf.print(wifi);
+    wf.close();
+
+    File sf = SPIFFS.open("/stations.txt", "w");
+    sf.print(stations);
+    sf.close();
+
+    server.send(200, "text/html", "<html><body><h2>Saved. Rebooting...</h2></body></html>");
+    delay(2000);
+    got_to_sleep();
+  });
+
+  // Catch-all route: redirect all unknown URLs to /
+  server.onNotFound([]() {
+    server.sendHeader("Location", "/", true);
+    server.send(302, "text/plain", "");
+  });
+
+
+  server.begin();
+  Serial.println("HTTP server started");
+
+  // Wait for button release
+  while (digitalRead(ENC1_BUT)==LOW)
+    delay(100);
+
+  // Keep serving the page
+  while (true) {
+    server.handleClient();
+    dnsServer.processNextRequest();
+    if (digitalRead(ENC1_BUT)==LOW)
+      ESP.restart();
+    delay(10);
+  }
+}
+
 void setup() {
 
-
- 
+  pinMode(ENC1_BUT, INPUT_PULLUP);
 
   Serial.begin(115200);
   while (!Serial)
     delay(10);
+  Serial.println("Woken up");
 
+  float current_vcc=analogRead(VCC_PIN)/565.0;
+  if (current_vcc<3.2)
+  {
+    Serial.println("Battery Voltage: " + String(current_vcc));
+    
+    Serial.println("Low battery - going to sleep");
+    got_to_sleep();
+
+  }
+
+  delay(1000);
+    
   check_wakeup_reason();
-  
+
+
+  init_ntp();
+
+  // Real time clock
+  Wire.setPins(DS3231_SDA, DS3231_CLK);
+
+  if (! rtc.begin()) {
+    Serial.println("RTC module is NOT found");
+    Serial.flush();
+    while (1);
+  }
+
+  // BUT pin low at boot - since the encoder button and the real time clock are both using it the 
+  // wakeup is most liekly triggered by the external real time clock
+  if (digitalRead(ENC1_BUT)==LOW)
+  {
+    auto_sleep=true;
+    Serial.println("Alarm wakeup - enabling autosleep - going to sleeo after s: " + String(auto_sleep_timeout/1000));
+  }
+
+  // This resets the alarm and the external interrupt from real time clock
+  rtc.disable32K();  // stop signal at the 32K pin
+  rtc.clearAlarm(1);
+  rtc.clearAlarm(2);
+  rtc.disableAlarm(1);
+  rtc.disableAlarm(2);
+  rtc.writeSqwPinMode(DS3231_OFF); // stop signal at the SQW pin
+
+  delay(100);
+  DateTime now = rtc.now();
+  int hour = now.hour();
+  int minute = now.minute();  
+  Serial.println("RTC local time at boot: " + String(hour) + ":" + String(minute));
+
+  // Check if BUT pin is still low after clearing the RTC alarm - since the encoder button and the real time clock are both using, if it the 
+  // user is still pressing the button -> enter setup
+  if (digitalRead(ENC1_BUT)==LOW)
+  {
+    Serial.println("Entering user setup");
+    ap_mode = true;
+    start_ap_mode();
+    
+  }
+
 
   full_init();
   
@@ -768,7 +1038,7 @@ void loop() {
       {
         last_station_change=millis();
         change_station=true;
-        String station_string=String(stations[enc_val]);
+        String station_string=stationList[enc_val];
         int del_pos = station_string.indexOf('@');
         this_stream_url=station_string.substring(del_pos+1);
         this_stream_name=String(enc_val) + " " + station_string.substring(0,del_pos);
