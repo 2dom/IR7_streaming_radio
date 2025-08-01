@@ -1,0 +1,41 @@
+Soma FM - Bossa Beyond@https://ice2.somafm.com/bossa-128-mp3
+Bossa Nova hits@https://strm112.1.fm/bossanova_128
+Bossa Nova Brazil@https://radio2.vip-radios.fm:18009/stream-128kmp3-BossaNovaBrazil
+Tango Nuevo@https://stream.laut.fm/tango-nuevo
+Tango Argentino@https://stream.laut.fm/tango
+Argentine Tango Radio@https://ais-sa2.cdnstream1.com/2202_128.mp3
+Chilltrax@https://go-audio.toya.net.pl/40
+Nordic Lodge Coppenhagen@https://radio.streemlion.com:1760/stream
+Blend FM Downtempo@https://stream.laut.fm/blendfm
+Motown Magic Oldies@http://airspectrum.cdnstream1.com:8024/1302_192
+Australian Trip Hop@http://abm22.com.au:8000/CONTAINER67
+24-7 Motown@https://antares.dribbcast.com/proxy/s8110/stream
+Trip Hop Lounge@https://royalradio.space/TH
+Funk Konstanz@https://stream.laut.fm/funk
+Funky Radio@https://ais-sa2.cdnstream1.com/2447_192.mp3
+Funklust@http://streaming.bitexpress.de:8010/mp3
+Funk Power@http://radio5.pro-fhi.net:9073/
+Exclusive Madonna@https://streaming.exclusive.radio/er/madonna/icecast.audio
+United Music Star Madonna@https://icy.unitedradio.it/um1031.mp3
+80s Radio@https://boxradio-edge-10.streamafrica.net/gospelplus
+80s Depeche Mode@https://streams.80s80s.de/dm/mp3-128
+80s Exitos@https://stream.laut.fm/80sexitos
+80s One@https://stream.laut.fm/80sone
+NPO Soul n Jazz@http://icecast.omroep.nl/radio6-bb-mp3
+The Great American Songbook@http://tgas.dyndns.org:8001/1
+ABC Jazz@http://audio-edge-es6pf.mia.g.radiomast.io/f0ac4bf3-bbe5-4edb-b828-193e0fdc4f2f
+Fascinating Jazz Radio@http://195.201.166.244:8270/stream
+Jazz Sakura@https://kathy.torontocast.com:3330/
+A A Jazz@http://62.210.204.2:8000/stream/5/
+ABC Relax New@http://manager7.streamradio.fr:1050/
+Cool Jazz HD@http://51.255.235.165:5092/stream
+Best Smooth Jazz UK@http://64.95.243.43:8002/stream
+Radio Seefunk@http://webradio.radio-seefunk.de:8000/
+Das Ding@https://liveradio.swr.de/d9zadj3/dasding/
+Power 100@https://playerservices.streamtheworld.com/api/livestream-redirect/MAR_ZINC96.mp3
+Rock Skye@https://stream.laut.fm/rock
+La casa del rock@https://rockfm-cope-rrcast.flumotion.com/cope/rockfm.mp3
+Rockland Radio@https://radio21.streamabc.net/radio21-rrludwigshafen-mp3-128-3576211
+Funky Corner Radio@http://176.31.111.65:4744
+Magic Oldies Florida@http://airspectrum.cdnstream1.com:8000/1261_192
+Oldie Antenne@http://s1-webradio.antenne.de/oldies-but-goldies
