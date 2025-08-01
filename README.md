@@ -132,7 +132,7 @@ The final component to wire up is the rotary encoder. After connecting all GPIO 
 
 
 
-## 🔌 Uploading the Software to the ESP32
+<h1>Uploading the Software to the ESP32</h1>
 
 Once your hardware is assembled, it’s time to upload the firmware and web assets to the ESP32. You can use either the **Arduino IDE** or **PlatformIO**. Both work—choose whichever you're more comfortable with.
 
