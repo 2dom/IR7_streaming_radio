@@ -1,5 +1,14 @@
 /*********************************************************************
-This code implements a web radio & alarm clock 
+Braun IR7 Web Radio & Alarm Clock Firmware
+
+This firmware turns an ESP32-based device into a fully featured web radio and alarm clock with the following features:
+  - Streams internet radio stations using a VS1053 audio decoder.
+  - WiFi configuration and radio station management via a built-in web interface (AP mode).
+  - Rotary encoder for intuitive control of volume, station, alarm time, and tone settings.
+  - Color TFT display for time, menus, battery, WiFi status, and scrolling song/station info.
+  - Real-time clock (RTC) with NTP synchronization and alarm functionality.
+  - Battery voltage monitoring and automatic sleep for power saving.
+  - Designed for the Braun IR7 hardware, but adaptable to similar ESP32 + VS1053 + TFT projects.
 
 Written by Dominic Buchstaller.
 BSD license, check license.txt for more information
