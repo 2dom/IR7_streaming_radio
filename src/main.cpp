@@ -103,7 +103,7 @@ RTC_DATA_ATTR config_struct myconfig[num_configs];
 RTC_DATA_ATTR bool alarm_on;
 #define CONFIG_SIZE sizeof(myconfig)
 
-// This is the y value on the LCD where the songle title and station is displayed
+// This is the y value on the LCD where the single title and station is displayed
 int title_pos=115;
 
 unsigned long last_second_update=0; // This is used executing one second repeating tasks
@@ -447,12 +447,12 @@ void connect_wifi(){
   pin_fade(0,LCD_BL);
 }
 
-// Starting radio straam
+// Start radio stream
 void start_stream()
 {
   mp3.connecttohost(this_stream_url);
   Serial.println("start_stream complete");
-} 
+}
 
 // Initialize display
 void init_display(){
@@ -471,7 +471,7 @@ void init_io()
 
   pinMode(VS1053_RST, OUTPUT); 
   pinMode(VS1053_CS,OUTPUT);
-	pinMode(VS1053_DCS,OUTPUT);
+  pinMode(VS1053_DCS,OUTPUT);
   digitalWrite(VS1053_DCS,HIGH);
   digitalWrite(VS1053_CS,HIGH);
  
@@ -618,130 +618,10 @@ void load_station_list() {
   f.close();
 }
 
-void full_init()
-{
-  if (myconfig[3].high_limit!=15) //No valid config - initialize
-  {
-    // Volume 
-    myconfig[0].low_limit=1;
-    myconfig[0].high_limit=50;
-    myconfig[0].value=10;
-
-    // Stationƒ
-    myconfig[1].low_limit=0;
-    myconfig[1].high_limit=0;
-    myconfig[1].value=0;
-
-    // Time 
-    myconfig[2].low_limit=0;
-    myconfig[2].high_limit=(24*60)-1;
-    myconfig[2].value=8*60;
-
-    // Tone
-    myconfig[3].low_limit=0;
-    myconfig[3].high_limit=15;
-    myconfig[3].value=15;
-
-    alarm_on=false;
-
-  }
-
-  for (int i=0; i<4; i++)
-    Serial.println(String(myconfig[i].low_limit)+ " " + String(myconfig[i].value) + " " + String(myconfig[i].high_limit));
-  
-  init_io();
-  
-  SPIsem = xSemaphoreCreateBinary();
-  xSemaphoreGive(SPIsem); 
-
-  init_display();
-
-  ScrollTextSprite.setColorDepth(16); 
-  ScrollTextSprite.createSprite(1000, 15); 
-  ScrollTextSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
-  ScrollTextSprite.setTextSize(2);
-  ScrollTextSprite.setSwapBytes(true);
-
-  ClockSprite.setColorDepth(16); 
-  ClockSprite.createSprite(240, 40); 
-  ClockSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
-  ClockSprite.setTextSize(2);
-  ClockSprite.setSwapBytes(true);
-  ClockSprite.loadFont(AgnellaBold50); 
-
-  // Mount SPIFFS (ensure this happens outside of AP mode too)
-  if (!SPIFFS.begin(true)) {
-    Serial.println("SPIFFS Mount Failed in full_init");
-  }
-
-  load_wifi_credentials();
-  connect_wifi();
-    
-  display.pushImage(0,0,240,240,BACKROUND);
-  draw_time();
-  draw_menu();
-  draw_alarm();
-  draw_wifi();
-  draw_battery();
-  
-  pin_fade(1,LCD_BL);
-  
-  start_VS1003();
-  Serial.println("\n\nEncoder started\n");
-
-  load_station_list();
-    
-  String station_string = stationList[myconfig[1].value];
-  int del_pos = station_string.indexOf('@');
-  this_stream_url=station_string.substring(del_pos+1);
-  this_stream_name=station_string.substring(0,del_pos);
-  Serial.println(this_stream_url);
-  setTone();
-
-  start_stream();
-  //digitalWrite(MOSFET_EN,HIGH);
-    
- 
-
-  start_rot_encoder();
-  
-  start_time=millis();
-
-  // Use seperate core to do WIFI & mp3 decode stuff
-  xTaskCreatePinnedToCore(
-      Task0code,   /* Task function. */
-      "Task0",     /* name of task. */
-      10000,       /* Stack size of task */
-      NULL,        /* parameter of the task */
-      5,           /* priority of the task */
-      &Task0,      /* Task handle to keep track of created task */
-      0);          /* pin task to core 0 */                  
-
-  Serial.println("Init complete");
-}
-
-void check_wakeup_reason() {
-  esp_sleep_wakeup_cause_t wakeup_reason;
-
-  wakeup_reason = esp_sleep_get_wakeup_cause();
-
-  switch (wakeup_reason) {
-    case ESP_SLEEP_WAKEUP_EXT0:     Serial.println("Wakeup caused by external signal EXT0");break;
-    case ESP_SLEEP_WAKEUP_EXT1:     Serial.println("Wakeup caused by external signal EXT1"); break;
-    case ESP_SLEEP_WAKEUP_TIMER:    Serial.println("Wakeup caused by timer"); break;
-    case ESP_SLEEP_WAKEUP_TOUCHPAD: Serial.println("Wakeup caused by touchpad"); break;
-    case ESP_SLEEP_WAKEUP_ULP:      Serial.println("Wakeup caused by ULP program"); break;
-    default:                        Serial.printf("Wakeup was not caused by deep sleep: %d\n", wakeup_reason); break;
-  }
-}
-
 
 
 void start_ap_mode() {
 
-  init_io();
-
-  init_display();
 
   ScrollTextSprite.setColorDepth(16); 
   ScrollTextSprite.createSprite(1000, 15); 
@@ -784,11 +664,6 @@ void start_ap_mode() {
 
   // Start DNS server to redirect all domains to ESP IP
   dnsServer.start(DNS_PORT, "*", apIP);
-
-  if (!SPIFFS.begin(true)) {
-    Serial.println("SPIFFS Mount Failed");
-    return;
-  }
 
   // Landing page with prepopulated textarea fields
   server.on("/", HTTP_GET, []() {
@@ -933,6 +808,134 @@ void start_ap_mode() {
   }
 }
 
+
+void full_init()
+{
+  if (myconfig[3].high_limit!=15) //No valid config - initialize
+  {
+    // Volume 
+    myconfig[0].low_limit=1;
+    myconfig[0].high_limit=50;
+    myconfig[0].value=10;
+
+    // Stationƒ
+    myconfig[1].low_limit=0;
+    myconfig[1].high_limit=0;
+    myconfig[1].value=0;
+
+    // Time 
+    myconfig[2].low_limit=0;
+    myconfig[2].high_limit=(24*60)-1;
+    myconfig[2].value=8*60;
+
+    // Tone
+    myconfig[3].low_limit=0;
+    myconfig[3].high_limit=15;
+    myconfig[3].value=15;
+
+    alarm_on=false;
+
+  }
+
+  for (int i=0; i<4; i++)
+    Serial.println(String(myconfig[i].low_limit)+ " " + String(myconfig[i].value) + " " + String(myconfig[i].high_limit));
+  
+  init_io();
+  
+  SPIsem = xSemaphoreCreateBinary();
+  xSemaphoreGive(SPIsem); 
+
+  init_display();
+
+  ScrollTextSprite.setColorDepth(16); 
+  ScrollTextSprite.createSprite(1000, 15); 
+  ScrollTextSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
+  ScrollTextSprite.setTextSize(2);
+  ScrollTextSprite.setSwapBytes(true);
+
+  ClockSprite.setColorDepth(16); 
+  ClockSprite.createSprite(240, 40); 
+  ClockSprite.setTextColor(TFT_WHITE,TFT_BLACK); 
+  ClockSprite.setTextSize(2);
+  ClockSprite.setSwapBytes(true);
+  ClockSprite.loadFont(AgnellaBold50); 
+
+  // Mount SPIFFS (ensure this happens outside of AP mode too)
+  if (!SPIFFS.begin(true)) {
+    Serial.println("SPIFFS Mount Failed in full_init");
+  }
+
+  load_wifi_credentials();
+    // Check if BUT pin is still low after clearing the RTC alarm - since the encoder button and the real time clock are both using, if it the 
+  // user is still pressing the button -> enter setup
+  if (digitalRead(ENC1_BUT)==LOW)
+  {
+    Serial.println("Entering user setup");
+    ap_mode = true;
+    start_ap_mode();
+    
+  }
+  connect_wifi();
+    
+  display.pushImage(0,0,240,240,BACKROUND);
+  draw_time();
+  draw_menu();
+  draw_alarm();
+  draw_wifi();
+  draw_battery();
+  
+  pin_fade(1,LCD_BL);
+  
+  start_VS1003();
+  Serial.println("\n\nEncoder started\n");
+
+  load_station_list();
+    
+  String station_string = stationList[myconfig[1].value];
+  int del_pos = station_string.indexOf('@');
+  this_stream_url=station_string.substring(del_pos+1);
+  this_stream_name=station_string.substring(0,del_pos);
+  Serial.println(this_stream_url);
+  setTone();
+
+  start_stream();
+  //digitalWrite(MOSFET_EN,HIGH);
+    
+ 
+
+  start_rot_encoder();
+  
+  start_time=millis();
+
+  // Use seperate core to do WIFI & mp3 decode stuff
+  xTaskCreatePinnedToCore(
+      Task0code,   /* Task function. */
+      "Task0",     /* name of task. */
+      10000,       /* Stack size of task */
+      NULL,        /* parameter of the task */
+      5,           /* priority of the task */
+      &Task0,      /* Task handle to keep track of created task */
+      0);          /* pin task to core 0 */                  
+
+  Serial.println("Init complete");
+}
+
+void check_wakeup_reason() {
+  esp_sleep_wakeup_cause_t wakeup_reason;
+
+  wakeup_reason = esp_sleep_get_wakeup_cause();
+
+  switch (wakeup_reason) {
+    case ESP_SLEEP_WAKEUP_EXT0:     Serial.println("Wakeup caused by external signal EXT0");break;
+    case ESP_SLEEP_WAKEUP_EXT1:     Serial.println("Wakeup caused by external signal EXT1"); break;
+    case ESP_SLEEP_WAKEUP_TIMER:    Serial.println("Wakeup caused by timer"); break;
+    case ESP_SLEEP_WAKEUP_TOUCHPAD: Serial.println("Wakeup caused by touchpad"); break;
+    case ESP_SLEEP_WAKEUP_ULP:      Serial.println("Wakeup caused by ULP program"); break;
+    default:                        Serial.printf("Wakeup was not caused by deep sleep: %d\n", wakeup_reason); break;
+  }
+}
+
+
 void setup() {
 
   pinMode(ENC1_BUT, INPUT_PULLUP);
@@ -952,7 +955,6 @@ void setup() {
 
   }
 
-  delay(1000);
     
   check_wakeup_reason();
 
@@ -989,17 +991,6 @@ void setup() {
   int hour = now.hour();
   int minute = now.minute();  
   Serial.println("RTC local time at boot: " + String(hour) + ":" + String(minute));
-
-  // Check if BUT pin is still low after clearing the RTC alarm - since the encoder button and the real time clock are both using, if it the 
-  // user is still pressing the button -> enter setup
-  if (digitalRead(ENC1_BUT)==LOW)
-  {
-    Serial.println("Entering user setup");
-    ap_mode = true;
-    start_ap_mode();
-    
-  }
-
 
   full_init();
   
