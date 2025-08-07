@@ -217,3 +217,54 @@ Once your hardware is assembled, it’s time to upload the firmware and web asse
    ```bash
    pio run --target upload
 
+<h1>Device Setup: Wi-Fi & Station Configuration</h1>
+
+### Entering Setup Mode (Configuration/AP Mode)
+
+To configure Wi-Fi and radio stations, you need to enter **setup mode** (also called AP mode):
+
+1. **Hold the Encoder Button**  
+   - While powering up (or rebooting) the device, **press and hold the rotary encoder button**.  
+   - Keep holding until the screen displays “Braun IR7 Config” and “Connect to Wifi:” (the device will now act as a Wi-Fi Access Point).
+
+2. **Connect to the Device’s Wi-Fi**  
+   - On your phone, tablet, or computer, search for the Wi-Fi network named:  
+     **Braun IR7 Config**  
+   - Connect to this network (no password required).
+
+3. **Access the Web Interface**  
+   - Open a web browser and go to:  
+     **http://192.168.4.1**  
+     *(You’ll be automatically redirected if you try any URL.)*
+
+### Entering Wi-Fi and Password Information
+
+- On the configuration page, you’ll see a field labeled:
+  **Wi-Fi Credentials (SSID;password per line)**
+- Enter your Wi-Fi credentials in this format:  
+your_wifi_ssid;your_wifi_password another_ssid;another_password
+
+Code
+*(Each line corresponds to one network. You can add multiple networks if desired.)*
+
+### Adding, Removing, or Editing Radio Stations
+
+- Below the Wi-Fi section, there’s a field labeled:
+**Radio Stations (name@url per line)**
+- Enter your favorite streaming radio stations in this format:
+Radio Paradise@http://stream.radioparadise.com/mp3-128 BBC World@http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1_mf_p
+
+Code
+*(Each line should have a station name, then an `@`, then the stream URL.)*
+
+- **To add a station:**  
+Just add a new line.
+- **To edit/remove a station:**  
+Modify or delete the relevant line.
+
+### Save & Reboot
+
+- Once you’ve entered your Wi-Fi and station details, **click “Save & Reboot”**.
+- The device will store your settings, reboot, and attempt to connect to the Wi-Fi network(s) you’ve provided.
+- After setup, the device will start streaming from your list of stations.
+
